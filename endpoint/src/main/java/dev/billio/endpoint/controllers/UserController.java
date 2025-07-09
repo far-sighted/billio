@@ -69,7 +69,7 @@ public class UserController {
      * @param user the UserModel object with updated information
      * @return the updated UserModel object
      */
-    @PostMapping
+    @PutMapping
     public UserModel UPDATE(@RequestBody UserModel user) {
         return userService.update(user);
     }
