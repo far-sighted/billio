@@ -3,17 +3,19 @@ package dev.billio.endpoint.controllers;
 import dev.billio.endpoint.models.UserModel;
 import dev.billio.endpoint.services.implementation.UserService;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/user")
 @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true", allowedHeaders = "*")
+@Tag(name = "User", description = "Endpoints for managing users in the Billio application. This includes operations for creating, retrieving, updating, and deleting user accounts.")
 public class UserController {
 
     //region Fields

@@ -1,7 +1,7 @@
 package dev.billio.endpoint.config;
 
-
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import org.springframework.context.annotation.Configuration;
 
 @OpenAPIDefinition(
         info = @io.swagger.v3.oas.annotations.info.Info(
@@ -14,5 +14,6 @@ import io.swagger.v3.oas.annotations.OpenAPIDefinition;
         },
         security = @io.swagger.v3.oas.annotations.security.SecurityRequirement(name = "bearer")
 )
+@Configuration
 public class OpenAPIConfiguration {
 }

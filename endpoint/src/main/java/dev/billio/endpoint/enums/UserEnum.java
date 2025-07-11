@@ -14,4 +14,13 @@ public class UserEnum {
         COMPANY,
     }
 
+    /**
+     * Enum representing the role of a user.
+     * It can be ADMIN, USER, or GUEST.
+     */
+    public enum eUserRole {
+        ADMIN,
+        USER,
+        GUEST,
+    }
 }
