@@ -9,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Set;
 import java.util.UUID;
@@ -18,16 +19,19 @@ public class UserService implements UserInterface {
 
     //region Fields
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
     //endregion Fields
 
     /**
      * Constructs a UserService with the specified UserRepository.
      *
-     * @param userRepository the UserRepository to be used by this service
+     * @param userRepository  the UserRepository to be used by this service
+     * @param passwordEncoder the PasswordEncoder to be used for encoding passwords
      */
     @Autowired
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     /**
@@ -54,6 +58,18 @@ public class UserService implements UserInterface {
     }
 
     /**
+     * Finds a user by username.
+     *
+     * @param username the username of the user
+     * @return the UserModel object corresponding to the given username
+     */
+    @Override
+    public UserModel find(String username) {
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("User not found with username: " + username));
+    }
+
+    /**
      * Saves a new user or updates an existing user.
      *
      * @param user the UserModel object to be saved or updated
@@ -61,6 +77,8 @@ public class UserService implements UserInterface {
      */
     @Override
     public UserModel save(UserModel user) {
+        if (user.getUuid() == null || !user.getPassword().equals(this.find(user.getUuid()).getPassword()))
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userRepository.save(user);
     }
 

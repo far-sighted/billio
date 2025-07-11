@@ -9,17 +9,21 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import org.hibernate.annotations.Cascade;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import java.util.HashSet;
-import java.util.Set;
-import java.util.UUID;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Data
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "dbo_datatable_user")
-public class UserModel {
+public class UserModel implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -32,6 +36,7 @@ public class UserModel {
     private String email;
 
     @Column(name = "u_password", nullable = false)
+    @JsonIgnore
     private String password;
 
     @Column(name = "u_type", nullable = false, columnDefinition = "VARCHAR(255) DEFAULT 'PERSON'")
@@ -49,4 +54,40 @@ public class UserModel {
     @Enumerated(EnumType.STRING)
     private Set<UserEnum.eUserPermission> permissions = new HashSet<>();
 
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return this.permissions.stream()
+                .map(permission -> new SimpleGrantedAuthority(permission.name()))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public String getUsername() {
+        return this.username;
+    }
+
+    @Override
+    public String getPassword() {
+        return this.password;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
 }

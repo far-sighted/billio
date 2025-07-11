@@ -28,6 +28,14 @@ public interface UserInterface {
     UserModel find(UUID uuid);
 
     /**
+     * Finds a user by username.
+     *
+     * @param username the username of the user
+     * @return the UserModel object corresponding to the given username
+     */
+    UserModel find(String username);
+
+    /**
      * Saves a new user or updates an existing user.
      *
      * @param user the UserModel object to be saved or updated

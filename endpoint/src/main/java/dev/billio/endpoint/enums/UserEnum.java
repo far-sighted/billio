@@ -24,9 +24,13 @@ public class UserEnum {
         GUEST,
     }
 
+    /**
+     * Enum representing the permissions a user can have.
+     * It includes permissions for super admin, user starter, reading users, and managing users.
+     */
     public enum eUserPermission {
         CAN_SUPER_ADMIN,
-        CAN_READ_USERS,
-        CAN_MANAGE_USERS,
+        CAN_USER_STARTER,
+        CAN_GUEST_STARTER
     }
 }
