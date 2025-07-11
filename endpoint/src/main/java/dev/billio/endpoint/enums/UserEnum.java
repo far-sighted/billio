@@ -23,4 +23,10 @@ public class UserEnum {
         USER,
         GUEST,
     }
+
+    public enum eUserPermission {
+        CAN_SUPER_ADMIN,
+        CAN_READ_USERS,
+        CAN_MANAGE_USERS,
+    }
 }

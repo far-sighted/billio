@@ -8,6 +8,10 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import org.hibernate.annotations.Cascade;
+
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 @Data
@@ -32,5 +36,17 @@ public class UserModel {
 
     @Column(name = "u_type", nullable = false, columnDefinition = "VARCHAR(255) DEFAULT 'PERSON'")
     @Enumerated(EnumType.STRING)
-    private UserEnum.eUserType type;
+    private UserEnum.eUserType type = UserEnum.eUserType.PERSON;
+
+    @Column(name = "u_role", nullable = false, columnDefinition = "VARCHAR(255) DEFAULT 'GUEST'")
+    @Enumerated(EnumType.STRING)
+    private UserEnum.eUserRole role = UserEnum.eUserRole.GUEST;
+
+    @ElementCollection(targetClass = UserEnum.eUserPermission.class, fetch = FetchType.EAGER)
+    @CollectionTable(name = "dbo_datatable_user_permission", joinColumns = @JoinColumn(name = "up_id"))
+    @Column(name = "up_permission", nullable = false, columnDefinition = "VARCHAR(255)")
+    @Cascade({org.hibernate.annotations.CascadeType.ALL})
+    @Enumerated(EnumType.STRING)
+    private Set<UserEnum.eUserPermission> permissions = new HashSet<>();
+
 }

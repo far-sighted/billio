@@ -1,5 +1,6 @@
 package dev.billio.endpoint.services.implementation;
 
+import dev.billio.endpoint.enums.UserEnum;
 import dev.billio.endpoint.models.UserModel;
 import dev.billio.endpoint.repositories.UserRepository;
 import dev.billio.endpoint.services.interfaces.UserInterface;
@@ -9,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.Set;
 import java.util.UUID;
 
 @Service
@@ -63,17 +65,6 @@ public class UserService implements UserInterface {
     }
 
     /**
-     * Updates an existing user.
-     *
-     * @param user the UserModel object to be updated
-     * @return the updated UserModel object
-     */
-    @Override
-    public UserModel update(UserModel user) {
-        return userRepository.save(user);
-    }
-
-    /**
      * Deletes a user by UUID.
      *
      * @param uuid the UUID of the user to be deleted
@@ -84,5 +75,19 @@ public class UserService implements UserInterface {
             throw new RuntimeException("User not found with UUID: " + uuid);
         }
         userRepository.deleteById(uuid);
+    }
+
+    /**
+     * Handles permissions for a user identified by UUID.
+     *
+     * @param uuid        the UUID of the user
+     * @param permissions the set of permissions to be assigned to the user
+     * @return the updated UserModel object with the new permissions
+     */
+    @Override
+    public UserModel handlePermissions(UUID uuid, Set<UserEnum.eUserPermission> permissions) {
+        UserModel user = userRepository.findById(uuid).orElseThrow(() -> new RuntimeException("User not found with UUID: " + uuid));
+        user.setPermissions(permissions);
+        return userRepository.save(user);
     }
 }

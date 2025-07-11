@@ -26,6 +26,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.Collections;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 
 @ExtendWith(MockitoExtension.class)
@@ -53,7 +54,7 @@ public class UserServiceTest {
     @BeforeEach
     void setUp() {
         uuid = UUID.randomUUID();
-        user = new UserModel(uuid, "test_user", "user@test.com", "password123", UserEnum.eUserType.COMPANY);
+        user = new UserModel(uuid, "test_user", "user@test.com", "password123", UserEnum.eUserType.COMPANY, UserEnum.eUserRole.GUEST, Collections.emptySet());
     }
 
     /**
@@ -103,21 +104,6 @@ public class UserServiceTest {
     }
 
     /**
-     * This test verifies that the update method of UserService updates a user
-     * and returns the updated user.
-     * It mocks the userRepository to return the updated user.
-     */
-    @Test
-    public void TEST_UPDATE_ShouldReturnUpdatedUser() {
-        when(userRepository.save(user)).thenReturn(user);
-
-        UserModel updated = userService.update(user);
-
-        assertEquals("test_user", updated.getUsername());
-        verify(userRepository).save(user);
-    }
-
-    /**
      * This test verifies that the delete method of UserService deletes a user
      * when the user exists in the repository.
      */
@@ -140,5 +126,23 @@ public class UserServiceTest {
 
         RuntimeException exception = assertThrows(RuntimeException.class, () -> userService.delete(uuid));
         assertEquals("User not found with UUID: " + uuid, exception.getMessage());
+    }
+
+    /**
+     * This test verifies that the handlePermissions method of UserService updates the user's permissions.
+     * It mocks the userRepository to return the user with updated permissions and checks that the returned
+     * UserModel has the expected permissions.
+     */
+    @Test
+    public void TEST_HANDLE_PERMISSIONS_ShouldReturnUpdatedUser() {
+        Set<UserEnum.eUserPermission> permissions = Collections.singleton(UserEnum.eUserPermission.CAN_SUPER_ADMIN);
+        user.setPermissions(permissions);
+
+        when(userRepository.findById(uuid)).thenReturn(Optional.of(user));
+        when(userRepository.save(user)).thenReturn(user);
+        UserModel updatedUser = userService.handlePermissions(uuid, permissions);
+        assertEquals(permissions, updatedUser.getPermissions());
+        verify(userRepository).findById(uuid);
+        verify(userRepository).save(user);
     }
 }

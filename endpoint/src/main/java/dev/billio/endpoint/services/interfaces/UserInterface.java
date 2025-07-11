@@ -1,9 +1,12 @@
 package dev.billio.endpoint.services.interfaces;
 
+import dev.billio.endpoint.enums.UserEnum;
 import dev.billio.endpoint.models.UserModel;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.util.Set;
 import java.util.UUID;
 
 public interface UserInterface {
@@ -33,17 +36,18 @@ public interface UserInterface {
     UserModel save(UserModel user);
 
     /**
-     * Updates an existing user.
-     *
-     * @param user the UserModel object with updated information
-     * @return the updated UserModel object
-     */
-    UserModel update(UserModel user);
-
-    /**
      * Deletes a user by UUID.
      *
      * @param uuid the UUID of the user to be deleted
      */
     void delete(UUID uuid);
+
+    /**
+     * Handles permissions for a user identified by UUID.
+     *
+     * @param uuid        the UUID of the user
+     * @param permissions the list of permissions to be assigned to the user
+     * @return the updated UserModel object with the new permissions
+     */
+    UserModel handlePermissions(UUID uuid, Set<UserEnum.eUserPermission> permissions);
 }
