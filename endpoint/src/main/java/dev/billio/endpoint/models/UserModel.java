@@ -88,4 +88,12 @@ public class UserModel implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
+    @PostPersist
+    public void addDefaultPermissions() {
+        if (this.permissions.contains(UserEnum.eUserPermission.CAN_USER_STARTER)) {
+            permissions.add(UserEnum.eUserPermission.CAN_USER_STARTER);
+        }
+    }
+
 }

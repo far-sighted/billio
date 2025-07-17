@@ -1,11 +1,9 @@
 package dev.billio.endpoint.services.implementation;
 
-import dev.billio.endpoint.enums.UserEnum;
 import dev.billio.endpoint.models.UserModel;
 import dev.billio.endpoint.dto.AuthenticationDto;
 import dev.billio.endpoint.services.interfaces.AuthenticationInterface;
 
-import jakarta.persistence.PostPersist;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -58,10 +56,7 @@ public class AuthenticationService implements AuthenticationInterface {
      * @return the registered UserModel
      */
     @Override
-    @PostPersist
     public UserModel register(UserModel user) {
-        user.getPermissions().add(UserEnum.eUserPermission.CAN_USER_STARTER);
-
         return userService.save(user);
     }
     
