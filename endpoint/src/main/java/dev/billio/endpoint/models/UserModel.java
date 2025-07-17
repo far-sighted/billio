@@ -36,7 +36,6 @@ public class UserModel implements UserDetails {
     private String email;
 
     @Column(name = "u_password", nullable = false)
-    @JsonIgnore
     private String password;
 
     @Column(name = "u_type", nullable = false, columnDefinition = "VARCHAR(255) DEFAULT 'PERSON'")
