@@ -45,6 +45,7 @@ public class AuthenticationService implements AuthenticationInterface {
                         authenticationRequest.getUsername(),
                         authenticationRequest.getPassword()
                 ));
+
         return userService.find(authenticationRequest.getUsername());
     }
 

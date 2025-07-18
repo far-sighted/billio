@@ -9,7 +9,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import org.hibernate.annotations.Cascade;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -36,7 +35,6 @@ public class UserModel implements UserDetails {
     private String email;
 
     @Column(name = "u_password", nullable = false)
-    @JsonIgnore
     private String password;
 
     @Column(name = "u_type", nullable = false, columnDefinition = "VARCHAR(255) DEFAULT 'PERSON'")
@@ -89,5 +87,16 @@ public class UserModel implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    /**
+     * Adds the default starter permission to the user after it has been persisted.
+     * This ensures that every newly created user has the CAN_USER_STARTER permission.
+     */
+    @PostPersist
+    public void addCanUserStarterPermission() {
+        if (this.permissions.contains(UserEnum.eUserPermission.CAN_USER_STARTER)) {
+            this.permissions.add(UserEnum.eUserPermission.CAN_USER_STARTER);
+        }
     }
 }
