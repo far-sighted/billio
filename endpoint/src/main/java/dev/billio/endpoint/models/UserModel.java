@@ -89,11 +89,14 @@ public class UserModel implements UserDetails {
         return true;
     }
 
+    /**
+     * Adds the default starter permission to the user after it has been persisted.
+     * This ensures that every newly created user has the CAN_USER_STARTER permission.
+     */
     @PostPersist
-    public void addDefaultPermissions() {
+    public void addCanUserStarterPermission() {
         if (this.permissions.contains(UserEnum.eUserPermission.CAN_USER_STARTER)) {
-            permissions.add(UserEnum.eUserPermission.CAN_USER_STARTER);
+            this.permissions.add(UserEnum.eUserPermission.CAN_USER_STARTER);
         }
     }
-
 }
