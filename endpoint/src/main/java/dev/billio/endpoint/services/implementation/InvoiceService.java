@@ -23,7 +23,6 @@ public class InvoiceService implements InvoiceInterface {
      *
      * @param invoiceRepository the InvoiceRepository to be used by this service
      */
-
     @Autowired
     public InvoiceService(InvoiceRepository invoiceRepository) {
         this.invoiceRepository = invoiceRepository;

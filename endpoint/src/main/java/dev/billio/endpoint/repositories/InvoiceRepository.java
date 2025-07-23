@@ -9,10 +9,4 @@ import java.util.UUID;
 
 @Repository
 public interface InvoiceRepository extends JpaRepository<InvoiceModel, UUID> {
-    /**
-     * Finds an invoice by its ID.
-     *
-     * @param invoiceNumber the ID of the invoice
-     * @return an Optional containing the InvoiceModel if found, or empty if not found
-     */
 }
